@@ -4,31 +4,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    float speed = 0.3f;
+    public GameObject stick;
+    float speed = 1000;
     float horizontalInput;
-    float acceleration;
-    // Start is called before the first frame update
+    Vector3 velocity;
+    Vector3 stick_initialposition;
 
-
-    // Update is called once per frame
+    private void Start()
+    {
+        this.stick_initialposition = this.stick.transform.position;
+        this.velocity = new Vector3();
+    }
     void FixedUpdate()
     {
-        setAcceleration();
-        speed = speed + this.acceleration * Time.deltaTime;
-        Debug.Log(speed);
-        this.horizontalInput = Input.GetAxis("Horizontal");        
-        this.transform.Translate(Vector3.right * horizontalInput * speed);
-    }
-
-    void setAcceleration()
-	{
-        if (Input.GetKey("a") || Input.GetKey("d"))
+        this.velocity.Set(this.speed * Time.fixedDeltaTime * Input.GetAxis("Horizontal"), 0, 0);
+        this.GetComponent<Rigidbody>().velocity = this.velocity;
+        Debug.Log(this.GetComponent<Rigidbody>().velocity);
+        if (this.stick.transform.position.y<-5)
         {
-            this.acceleration = 2.0f;
-        }        
-
-        else
-            this.speed = 0.3f;
-	}
+            this.stick.transform.position = this.stick_initialposition;
+        }
+    }
 }
