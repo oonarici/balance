@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject stick;
-    float speed = 1000;
+    public float speed = 1000;
     float horizontalInput;
     Vector3 velocity;
     Vector3 stick_initialposition;
@@ -20,9 +20,17 @@ public class PlayerController : MonoBehaviour
         this.velocity.Set(this.speed * Time.fixedDeltaTime * Input.GetAxis("Horizontal"), 0, 0);
         this.GetComponent<Rigidbody>().velocity = this.velocity;
         Debug.Log(this.GetComponent<Rigidbody>().velocity);
-        if (this.stick.transform.position.y<-5)
+
+        if (this.stick.transform.position.y < -5)
         {
             this.stick.transform.position = this.stick_initialposition;
+            this.stick.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
+
+	private void OnCollisionEnter(Collision collision)
+	{
+        Buff bff = Buff.getInstance;
+        bff.gameObject.SetActive(false);
+	}
 }
